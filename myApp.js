@@ -1,10 +1,14 @@
 require("dotenv").config();
+require("body-parser");
+const bodyParser = require("body-parser");
 let express = require("express");
 let app = express();
 
 // app.METHOD(PATH, HANDLER) --> the handler is a function that Express calls when the route is matched.
 
 absolutePath = __dirname + "/views/index.html";
+
+app.use(bodyParser.urlencoded({extended:false}))
 
 app.use((req, res, next) => {
   console.log(req.method + " " + req.path + " - " + req.ip);
@@ -42,6 +46,14 @@ res.json({"echo": req.params.word});
 app.get("/name", function(req, res) {
     var firstName = req.query.first;
     var lastName = req.query.last;
+    res.json({
+      name: `${firstName} ${lastName}`
+    });
+  });
+
+  app.post("/name", function(req, res) {
+    var firstName = req.body.first;
+    var lastName = req.body.last;
     res.json({
       name: `${firstName} ${lastName}`
     });

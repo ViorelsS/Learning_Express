@@ -6,10 +6,10 @@ let app = express();
 
 absolutePath = __dirname + "/views/index.html";
 
-app.use((req, res, next)=>{
-    console.log(req.method + " " + req.path + " - " + req.ip);
-    next();
-})
+app.use((req, res, next) => {
+  console.log(req.method + " " + req.path + " - " + req.ip);
+  next();
+});
 
 // app.get("/", (req, res) =>res.send("Hello Express"));
 app.get("/", (req, res) => res.sendFile(absolutePath));
@@ -24,6 +24,26 @@ app.get("/json", (req, res) => {
   }
 });
 
+app.get(
+  "/now",
+  (req, res, next) => {
+    req.time = new Date().toString();
+    next();
+  },
+  (req, res) => res.json({ time: req.time })
+);
 
+
+app.get('/:word/echo', (req,res, next)=>{
+res.json({"echo": req.params.word});
+});
+
+
+app.get("/name", function(req, res) {
+    var firstName = req.query.first;
+    var lastName = req.query.last;
+    res.json({
+      name: `${firstName} ${lastName}`
+    });
+  });
 module.exports = app;
-
